@@ -1,5 +1,5 @@
 # Flask HW №1
-![flake8](https://github.com/EgorikA4/709_22_2/actions/workflows/python-package.yml/badge.svg?branch=litvinov)
+![flake8](https://github.com/EgorikA4/709_22_2/actions/workflows/pylint.yml/badge.svg?branch=flask_project)
 
 ## Installation
 1. Install [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script).
