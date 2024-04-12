@@ -1,0 +1,6 @@
+"""HTTP status codes."""
+BAD_REQUEST = 400
+CREATED = 201
+OK = 200
+NO_CONTENT = 204
+NOT_FOUND = 404

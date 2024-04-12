@@ -1,0 +1,19 @@
+name: flake8
+on: [push]
+jobs:
+  linter_for_flask_hw:
+    name: linter_for_flask_hw
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10.6
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements/main_requirements.txt
+        python -m pip install -r requirements/dev_requirements.txt
+    - name: Lint with flake8
+      run: flake8 hw/
