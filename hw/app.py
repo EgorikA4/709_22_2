@@ -148,7 +148,7 @@ def update_properties() -> tuple[str, int]:
         return cursor.fetchone(), http_codes.NO_CONTENT
 
 
-@app.post('/properties/delete')
+@app.delete('/properties/delete')
 def delete_properties():
     """Delete properties record from db.
 

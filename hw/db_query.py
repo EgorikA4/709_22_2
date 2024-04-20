@@ -9,8 +9,8 @@ GET_PROPERTIES = """
                     'address', hcs.address, 'capital', hcs.capital
                 ))
                     filter (where hcs.id is not null), '[]') as hcs
-            from properties as p
-            left join hcs on p.hcs_id = hcs.id
+            from api_data.properties as p
+            left join api_data.hcs on p.hcs_id = api_data.hcs.id
             group by p.id
         ),
         properties_with_owners as (
@@ -23,10 +23,12 @@ GET_PROPERTIES = """
                     'id', owners.id, 'first_name', owners.first_name,
                     'last_name', owners.last_name, 'passport', owners.passport
                 ))
-                    filter (where owners.id is not null), '[]') as owners
-            from properties as p
-            left join owners_properties as op on op.properties_id = p.id
-            left join owners on op.owners_id = owners.id
+                    filter (where owners.id is not null), '[]')
+                    as owners
+            from api_data.properties as p
+            left join api_data.owners_properties as op\
+                on op.properties_id = p.id
+            left join api_data.owners on op.owners_id = api_data.owners.id
             group by p.id
         )
 
@@ -41,16 +43,16 @@ GET_PROPERTIES = """
     from properties_with_owners as pwo
     join properties_with_hcs as pwh on pwo.id = pwh.id;
     """
-GET_ENTITY = 'select id from {table} where id = {id_};'
+GET_ENTITY = 'select id from api_data.{table} where id = {id_};'
 
 CREATE_PROPERTIES = """
-    insert into properties (address, square, price, hcs_id)
+    insert into api_data.properties (address, square, price, hcs_id)
     values ({address}, {square}, {price}, {hcs_id})
     returning id;
 """
 
 UPDATE_PROPERTIES = """
-    update properties
+    update api_data.properties
     set
         address = {address},
         square = {square},
@@ -60,13 +62,13 @@ UPDATE_PROPERTIES = """
     returning id;
 """
 
-GET_HCS_ID = 'select hcs_id from properties where id = {id_}'
+GET_HCS_ID = 'select hcs_id from api_data.properties where id = {id_}'
 
 DELETE_PROPERTIES_LINKS = """
-    delete from owners_properties where properties_id = {id_}
+    delete from api_data.owners_properties where properties_id = {id_}
 """
 
 DELETE_PROPERTIES = """
-    delete from properties where id = {id_}
+    delete from api_data.properties where id = {id_}
     returning id;
 """

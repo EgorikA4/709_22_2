@@ -2,9 +2,9 @@
 
 create extension if not exists "uuid-ossp";
 
-drop table if exists owners, hcs, properties, owners_properties cascade;
+create schema api_data;
 
-create table owners(
+create table api_data.owners(
 	id uuid primary key default uuid_generate_v4(),
 	first_name text,
 	last_name text,
@@ -12,7 +12,7 @@ create table owners(
 	unique (passport)
 );
 
-create table hcs(
+create table api_data.hcs(
 	id uuid primary key default uuid_generate_v4(),
 	name text,
 	phone text,
@@ -20,17 +20,17 @@ create table hcs(
 	capital float
 );
 
-create table properties(
+create table api_data.properties(
 	id uuid primary key default uuid_generate_v4(),
 	address text,
 	square float,
 	price float,
-	hcs_id uuid references hcs
+	hcs_id uuid references api_data.hcs
 );
 
-create table owners_properties(
-	owners_id uuid references owners,
-	properties_id uuid references properties,
+create table api_data.owners_properties(
+	owners_id uuid references api_data.owners,
+	properties_id uuid references api_data.properties,
 	primary key (owners_id, properties_id)
 );
 
