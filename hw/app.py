@@ -83,6 +83,49 @@ def _get_entity_id(id_: str, table_name: str) -> str | None:
         return id_ if bool(cursor.fetchone()) else None
 
 
+@app.get('/properties/find_by_price')
+def get_properties_by_price_and_square() -> tuple[str, int]:
+    """Read properties in the specified price range.
+
+    Returns:
+        properties the prices of which fall within a certain range.
+    """
+    price_lower_bound = flask.request.args.get('price_lower_bound', None)
+    price_upper_bound = flask.request.args.get('price_upper_bound', None)
+
+    if not price_lower_bound or not price_upper_bound:
+        return '', http_codes.BAD_REQUEST
+
+    with connection.cursor() as cursor:
+        query = SQL(db_query.GET_PROPERTIES_BY_PRICE).format(
+            price_lower_bound=Literal(price_lower_bound),
+            price_upper_bound=Literal(price_upper_bound),
+        )
+        cursor.execute(query)
+        return cursor.fetchall(), http_codes.OK
+
+
+@app.get('/properties/find_by_address')
+def get_properties_by_address() -> tuple[str, int]:
+    """Read properties with the specified address.
+
+    Returns:
+        properties with the specified address.
+    """
+    address = flask.request.args.get('address', None)
+
+    if not address:
+        return '', http_codes.BAD_REQUEST
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            SQL(db_query.GET_PROPERTIES_BY_ADDRESS).format(
+                address=Literal('%{0}%'.format(address)),
+            ),
+        )
+        return cursor.fetchall(), http_codes.OK
+
+
 @app.post('/properties/create')
 def create_properties() -> tuple[str, int]:
     """Create properties record in db.
